@@ -1,6 +1,10 @@
 use core::fmt;
+use std::io;
+use std::io::prelude::*;
+use std::fs::File;
+use std::io::BufReader;
 
-fn main() {
+fn main() -> io::Result<()> {
     println!("Test");
     let mut td = TileData {
         low: [0,0,0,0,0,0,0,0],
@@ -11,6 +15,26 @@ fn main() {
     td.set_pixel(4, 2, 3);
     let px = td.get_pixel(2,2);    
     println!("{px}");
+
+    let f = File::open("/workspaces/GBT/snake.2bpp")?;
+    let mut reader = BufReader::new(f);
+    let mut buffer: Vec<u8> = Vec::new();
+    reader.read_to_end(&mut buffer)?;
+    
+    let mut tile_set: Vec<TileData> = Vec::new();
+    while buffer.len() > 0
+    {
+        let raw_tile_data = buffer.split_off(16);
+
+        tile_set.push(TileData {
+            low: [buffer[0],buffer[2],buffer[4],buffer[6],buffer[8],buffer[10],buffer[12],buffer[14]],
+            high: [buffer[1],buffer[3],buffer[5],buffer[7],buffer[9],buffer[11],buffer[13],buffer[15]]
+        });
+        buffer = raw_tile_data;
+    }
+    let test = &tile_set[1];
+    println!("{test}");
+    Ok(())
 }
 
 pub struct TileData {
