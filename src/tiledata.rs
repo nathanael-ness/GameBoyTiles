@@ -1,5 +1,6 @@
 use core::fmt;
 
+#[derive(Debug)]
 pub struct TileData {
     pub low: [u8; 8],
     pub high: [u8; 8]
