@@ -1,9 +1,8 @@
 use std::io;
-use tiledata::TileData;
-use tileset::TileSet;
+use tile::tiledata::TileData;
+use tile::tileset::TileSet;
 
-pub mod tiledata;
-pub mod tileset;
+mod tile;
 
 fn main() -> io::Result<()> {
     println!("Test");

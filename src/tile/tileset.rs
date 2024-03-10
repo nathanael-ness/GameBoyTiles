@@ -1,11 +1,10 @@
-use std::io;
+use std::io::{self, Read, Write};
 use std::fs::File;
 use std::io::BufReader;
 use std::fs::OpenOptions;
 
-use tiledata::TileData;
+use super::tiledata::TileData;
 
-pub mod .\tiledata;
 
 #[derive(Debug)]
 pub struct TileSet {
