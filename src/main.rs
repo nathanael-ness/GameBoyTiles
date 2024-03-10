@@ -1,10 +1,9 @@
-use std::io;
 use tile::tiledata::TileData;
 use tile::tileset::TileSet;
 
 mod tile;
 
-fn main() -> io::Result<()> {
+fn main() {
     println!("Test");
     let mut td = TileData {
         low: [0,0,0,0,0,0,0,0],
@@ -35,5 +34,4 @@ fn main() -> io::Result<()> {
 
     let test = &ts.data[1];
     println!("{test}");
-    Ok(())
 }
