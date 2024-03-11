@@ -16,7 +16,7 @@ fn main() {
     println!("{px}");
 
     //"/workspaces/GBT/snake.2bpp"
-    let mut ts: TileSet = TileSet{ data: Vec::new() };
+    let mut ts: TileSet = TileSet::new();
     let file_path = "/workspaces/gbt/snake.2bpp";
     let result = ts.read_file(file_path);
     
