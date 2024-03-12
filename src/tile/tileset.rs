@@ -51,28 +51,39 @@ impl TileSet {
 
     pub fn write_bmp(&self, filepath: &str) -> io::Result<()> {
         let mut f = OpenOptions::new().write(true).create(true).open(filepath)?;
-        f.write("BM".as_bytes());
-        f.write(0); // file size
-        f.write(0.as_bytes()); // unused
-        f.write(0.as_bytes()); // data offset
-        f.write(40.as_bytes()); // header size
-        f.write(1.as_buffer()); // width
-        f.write(1.as_bytes()); // height
-        f.write(1_u16.as_bytes()); // layers
-        f.write(4_u16.as_bytes()); // bits per pixel
-        f.write(0.as_bytes()); // compression
-        f.write(0.as_bytes()); // image data size
-        f.write(1.as_buffer()); // width pixels/meter
-        f.write(1.as_buffer()); // height pixels/meter
-        f.write(16.as_buffer()); // colors used
-        f.write(0.as_buffer()); // important colors
-        f.write(64.as_buffer()); // color table size
-        f.write(4294967040.as_bytes()); // white
-        f.write(2863311360.as_bytes()); // light grey
-        f.write(1431655680.as_bytes()); // dark grey
-        f.write(0.as_bytes()); // black
+        let file_header_size: i32 = 14;
+        let bitmap_header_size: i32 = 40;
+        let pallet_size: i32 = 64;
+        let image_data_size = 4;
+        let file_size: i32 = file_header_size + bitmap_header_size + pallet_size + image_data_size;
+        // file header
+        f.write("BM".as_bytes())?;
+        f.write(&file_size.to_le_bytes())?; // file size
+        f.write(&0_i32.to_le_bytes())?; // unused
+        f.write(&114_u32.to_le_bytes())?; // data offset
+        // bitmap header
+        f.write(&bitmap_header_size.to_le_bytes())?; // header size
+        f.write(&4_i32.to_le_bytes())?; // width
+        f.write(&1_i32.to_le_bytes())?; // height
+        f.write(&1_u16.to_le_bytes())?; // layers
+        f.write(&4_u16.to_le_bytes())?; // bits per pixel
+        f.write(&0_i32.to_le_bytes())?; // compression
+        f.write(&0_u32.to_le_bytes())?; // image data size
+        f.write(&1_i32.to_le_bytes())?; // width pixels/meter
+        f.write(&1_i32.to_le_bytes())?; // height pixels/meter
+        f.write(&16_i32.to_le_bytes())?; // colors used
+        f.write(&0_i32.to_le_bytes())?; // important colors
+        // pallet data
+        f.write(&16777215_u32.to_le_bytes())?; // white
+        f.write(&11184810_u32.to_le_bytes())?; // light grey
+        f.write(&5592405_u32.to_le_bytes())?; // dark grey
+        f.write(&0_u32.to_le_bytes())?; // black
+        for _ in 1..12 {
+            f.write(&0_u32.to_le_bytes())?; // black
+        }
         // image data
-        f.write(0.as_bytes());
-        OK(())
+        f.write(&19070976_u32.to_be_bytes())?;
+
+        Ok(())
     }
 }

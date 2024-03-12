@@ -10,6 +10,13 @@
 		"DISPLAY": "0"
 	},
 	"appPort": "8080:80"
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.hexeditor"
+			]
+		}
+	}
 
 	// Use 'mounts' to make the cargo cache persistent in a Docker Volume.
 	// "mounts": [

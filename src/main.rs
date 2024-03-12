@@ -32,6 +32,8 @@ fn main() {
         Err(error) => panic!("File not saved {error}")
     }
 
+    let _ = ts.write_bmp("Test.bmp");
+
     let test = &ts.data[1];
     println!("{test}");
 }
