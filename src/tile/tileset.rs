@@ -54,7 +54,10 @@ impl TileSet {
         let file_header_size: i32 = 14;
         let bitmap_header_size: i32 = 40;
         let pallet_size: i32 = 64;
-        let image_data_size = 4;
+        let width: i32 = 8;
+        let height: i32 = 2;
+        let width_padding = if width % 8 == 0 { width } else { width + (8 - (width % 8)) };
+        let image_data_size = width_padding * height;
         let file_size: i32 = file_header_size + bitmap_header_size + pallet_size + image_data_size;
         // file header
         f.write("BM".as_bytes())?;
@@ -63,8 +66,8 @@ impl TileSet {
         f.write(&114_u32.to_le_bytes())?; // data offset
         // bitmap header
         f.write(&bitmap_header_size.to_le_bytes())?; // header size
-        f.write(&4_i32.to_le_bytes())?; // width
-        f.write(&1_i32.to_le_bytes())?; // height
+        f.write(&width.to_le_bytes())?; // width
+        f.write(&height.to_le_bytes())?; // height
         f.write(&1_u16.to_le_bytes())?; // layers
         f.write(&4_u16.to_le_bytes())?; // bits per pixel
         f.write(&0_i32.to_le_bytes())?; // compression
@@ -82,7 +85,9 @@ impl TileSet {
             f.write(&0_u32.to_le_bytes())?; // black
         }
         // image data
-        f.write(&19070976_u32.to_be_bytes())?;
+        f.write(&839922192_u32.to_be_bytes())?;
+        f.write(&536870912_u32.to_be_bytes())?;
+        
 
         Ok(())
     }
