@@ -1,19 +1,19 @@
-use tile::tiledata::TileData;
+//use tile::tiledata::TileData;
 use tile::tileset::TileSet;
 
 mod tile;
 
 fn main() {
     println!("Test");
-    let mut td = TileData {
-        low: [0,0,0,0,0,0,0,0],
-        high: [0,0,0,0,0,0,0,0]
-    };
-    td.set_pixel(2, 2, 3);
-    td.set_pixel(3, 2, 3);
-    td.set_pixel(4, 2, 3);
-    let px = td.get_pixel(2,2);    
-    println!("{px}");
+    // let mut td = TileData {
+    //     low: [0,0,0,0,0,0,0,0],
+    //     high: [0,0,0,0,0,0,0,0]
+    // };
+    // td.set_pixel(2, 2, 3);
+    // td.set_pixel(3, 2, 3);
+    // td.set_pixel(4, 2, 3);
+    // let px = td.get_pixel(2,2);    
+    // println!("{px}");
 
     //"/workspaces/GBT/snake.2bpp"
     let mut ts: TileSet = TileSet::new();
@@ -34,6 +34,6 @@ fn main() {
 
     let _ = ts.write_bmp("Test.bmp");
 
-    let test = &ts.data[1];
-    println!("{test}");
+    // let test = &ts.data[1];
+    // println!("{test}");
 }

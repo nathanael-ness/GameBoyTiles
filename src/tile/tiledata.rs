@@ -7,6 +7,7 @@ pub struct TileData {
 }
 
 impl TileData {
+    #![allow(dead_code)]
     pub fn set_pixel(&mut self, x: usize, y: usize, color: i32) {
         if color < 0 || color >= 4 {
             return;
@@ -39,15 +40,15 @@ impl TileData {
         self.high[y] = high;
     }
 
-    pub fn get_pixel(self, x: usize, y: usize) -> i32 {
+    pub fn get_pixel(&self, x: usize, y: usize) -> u32 {
         let mut low = self.low[y];
         let mut high = self.high[y];
         let mask: u8 = 1 << 7 - x;
         low &= mask;
         high &= mask;
-        let h = high >> 6 - x;
+        let h = (high >> 7 - x) << 1;
         let l = low >> 7 - x;
-        return (h + l) as i32;
+        return (h + l) as u32;
     }
 }
 

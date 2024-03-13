@@ -55,7 +55,7 @@ impl TileSet {
         let bitmap_header_size: i32 = 40;
         let pallet_size: i32 = 64;
         let width: i32 = 8;
-        let height: i32 = 2;
+        let height: i32 = 8;
         let width_padding = if width % 8 == 0 { width } else { width + (8 - (width % 8)) };
         let image_data_size = width_padding * height;
         let file_size: i32 = file_header_size + bitmap_header_size + pallet_size + image_data_size;
@@ -72,8 +72,8 @@ impl TileSet {
         f.write(&4_u16.to_le_bytes())?; // bits per pixel
         f.write(&0_i32.to_le_bytes())?; // compression
         f.write(&0_u32.to_le_bytes())?; // image data size
-        f.write(&1_i32.to_le_bytes())?; // width pixels/meter
-        f.write(&1_i32.to_le_bytes())?; // height pixels/meter
+        f.write(&2835_i32.to_le_bytes())?; // width pixels/meter
+        f.write(&2835_i32.to_le_bytes())?; // height pixels/meter
         f.write(&16_i32.to_le_bytes())?; // colors used
         f.write(&0_i32.to_le_bytes())?; // important colors
         // pallet data
@@ -85,10 +85,15 @@ impl TileSet {
             f.write(&0_u32.to_le_bytes())?; // black
         }
         // image data
-        f.write(&839922192_u32.to_be_bytes())?;
-        f.write(&536870912_u32.to_be_bytes())?;
-        
-
+        let px = &self.data[0];
+        for y in (0..8).rev() {
+            let mut line: u32 = px.get_pixel(0, y);
+            for x in 1..8 {
+                line = line << 4;
+                line += px.get_pixel(x, y);
+            }
+            f.write(&line.to_be_bytes())?;
+        }
         Ok(())
     }
 }
