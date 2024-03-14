@@ -56,7 +56,7 @@ impl TileSet {
             let mut f = OpenOptions::new().write(true).create(true).open(path)?;
             let file_header_size: i32 = 14;
             let bitmap_header_size: i32 = 40;
-            let pallet_size: i32 = 64;
+            let pallet_size: i32 = 16;
             let width: i32 = 8;
             let height: i32 = 8;
             let width_padding = if  ((width * 4) % 32) == 0 { width / 2 } else {(((width * 4) as f32 / 32_f32).floor() as i32 + 1) / 2};
@@ -67,7 +67,7 @@ impl TileSet {
             f.write("BM".as_bytes())?;
             f.write(&file_size.to_le_bytes())?; // file size
             f.write(&0_i32.to_le_bytes())?; // unused
-            f.write(&114_u32.to_le_bytes())?; // data offset
+            f.write(&70_u32.to_le_bytes())?; // data offset
             // bitmap header
             f.write(&bitmap_header_size.to_le_bytes())?; // header size
             f.write(&width.to_le_bytes())?; // width
@@ -75,19 +75,17 @@ impl TileSet {
             f.write(&1_u16.to_le_bytes())?; // layers
             f.write(&4_u16.to_le_bytes())?; // bits per pixel
             f.write(&0_i32.to_le_bytes())?; // compression
-            f.write(&file_size.to_le_bytes())?; // image data size
+            f.write(&0_u32.to_le_bytes())?; // image data size
             f.write(&2835_i32.to_le_bytes())?; // width pixels/meter
             f.write(&2835_i32.to_le_bytes())?; // height pixels/meter
-            f.write(&16_i32.to_le_bytes())?; // colors used
-            f.write(&0_i32.to_le_bytes())?; // important colors
+            f.write(&3_i32.to_le_bytes())?; // colors used
+            f.write(&3_i32.to_le_bytes())?; // important colors
             // pallet data
             f.write(&16777215_u32.to_le_bytes())?; // white
             f.write(&11184810_u32.to_le_bytes())?; // light grey
             f.write(&5592405_u32.to_le_bytes())?; // dark grey
             f.write(&0_u32.to_le_bytes())?; // black
-            for _ in 1..13 {
-                f.write(&0_u32.to_le_bytes())?; // black
-            }
+
             // image data
             let px = &self.data[image_index];
             for y in (0..8).rev() {

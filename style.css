@@ -1,5 +1,16 @@
 .wrapper {
-    display: grid;
-    grid-template-columns: 200px 200px 200px;
-  }
+  display: grid;
+  grid-template-columns: 200px 200px 200px;
+}
   
+img {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+img:nth-child(2) {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
