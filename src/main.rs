@@ -3,7 +3,20 @@ use tile::tileset::TileSet;
 
 mod tile;
 
-fn main() {
+#[macro_use] extern crate rocket;
+
+#[get("/")]
+fn index() -> &'static str {
+    "Hello, world!"
+}
+
+#[launch]
+fn rocket() -> _ {
+    rocket::build().mount("/", routes![index])
+}
+
+
+fn test() {
     println!("Test");
     // let mut td = TileData {
     //     low: [0,0,0,0,0,0,0,0],
