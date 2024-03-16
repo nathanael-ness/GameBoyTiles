@@ -9,7 +9,7 @@
 	"containerEnv": {
 		"DISPLAY": "0"
 	},
-	"appPort": "8080:80"
+	"appPort": "8080:80",
 	"customizations": {
 		"vscode": {
 			"extensions": [
