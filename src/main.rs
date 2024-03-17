@@ -14,10 +14,13 @@ slint::slint!{
             source: @image-url("temp/image.png");
             width: parent.width;
             height: parent.height;
+            image-rendering: pixelated;
         }
     }
 
     export component MainWindow inherits Window {
+        width: 500px;
+        height: 500px;
         MemoryTile {}
     }
 }
