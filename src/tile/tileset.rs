@@ -1,7 +1,8 @@
-use std::io::{self, Read, Write};
+use std::io::{self, BufWriter, Read, Write};
 use std::fs::File;
 use std::io::BufReader;
 use std::fs::OpenOptions;
+use std::path::Path;
 
 use super::tiledata::TileData;
 
@@ -97,6 +98,38 @@ impl TileSet {
                 f.write(&line.to_be_bytes())?;
             }            
         }
+        Ok(())
+    }
+
+    pub fn write_png(&self) -> io::Result<()> {
+        let path = Path::new("temp/image.png");
+        let file = OpenOptions::new().write(true).create(true).open(path).unwrap();
+        let ref mut w = BufWriter::new(file);
+
+        let mut encoder: png::Encoder<'_, &mut BufWriter<File>> = png::Encoder::new(w, 8, 8); // Width is 2 pixels and height is 1.
+        encoder.set_color(png::ColorType::Grayscale);
+        encoder.set_depth(png::BitDepth::Two);
+       
+        let mut writer = encoder.write_header().unwrap();
+
+        let mut data: [u8; 16] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        let px = &self.data[0];
+            for y in 0..8 {
+                let mut line: u8 = 3 - px.get_pixel(0, y) as u8;
+                for x in 1..4 {
+                    line = line << 2;
+                    line += 3 - px.get_pixel(x, y) as u8;
+                }
+                data[y*2] = line;
+                line = 3 - px.get_pixel(4, y) as u8;
+                for x in 5..8 {
+                    line = line << 2;
+                    line += 3 - px.get_pixel(x, y) as u8;
+                }
+                data[(y*2)+1] = line;
+            }    
+        //let data = [255, 0, 0, 255, 0, 0, 0, 255]; // An array containing a RGBA sequence. First pixel is red and second pixel is black.
+        writer.write_image_data(&data).unwrap(); // Save
         Ok(())
     }
 }

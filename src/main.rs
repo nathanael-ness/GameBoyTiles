@@ -3,21 +3,29 @@ use tile::tileset::TileSet;
 
 mod tile;
 
-#[macro_use] extern crate rocket;
 
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
+slint::slint!{
+    component MemoryTile inherits Rectangle {
+        width: 64px;
+        height: 64px;
+        background: #3960D5;
+    
+        Image {
+            source: @image-url("temp/image.png");
+            width: parent.width;
+            height: parent.height;
+        }
+    }
+
+    export component MainWindow inherits Window {
+        MemoryTile {}
+    }
 }
 
-#[launch]
-fn rocket() -> _ {
-    rocket::build().mount("/", routes![index])
-}
 
+fn main() {
+    MainWindow::new().unwrap().run().unwrap();
 
-fn test() {
-    println!("Test");
     // let mut td = TileData {
     //     low: [0,0,0,0,0,0,0,0],
     //     high: [0,0,0,0,0,0,0,0]
@@ -45,7 +53,8 @@ fn test() {
         Err(error) => panic!("File not saved {error}")
     }
 
-    let _ = ts.write_bmp();
+    //let _ = ts.write_bmp();
+    //let _ = ts.write_png();
 
     // let test = &ts.data[1];
     // println!("{test}");
