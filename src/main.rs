@@ -5,113 +5,126 @@ mod tile;
 
 slint::slint! {
     import { Button, GridBox } from "std-widgets.slint";
-component MemoryTile inherits Rectangle {
-        width: 64px;
-        height: 64px;
-        background: #3960D5;
+    component PalletColor  {
+        in property <int> p_color;
+        min-height: 32px;
+        min-width: 32px;
+        max-height: self.width;
+        Rectangle {
+            background: p_color == 0 ? #ffffff :
+                        p_color == 1 ? #aaaaaa :
+                        p_color == 2 ? #555555 :
+                        #000000;
+        }
+    }
 
-        Image {
-            source: @image-url("temp/image.png");
-            width: parent.width;
-            height: parent.height;
-            image-rendering: pixelated;
+    component Pixel  {
+        in property <int> px_color;
+        min-height: 64px;
+        min-width: 64px;
+        max-height: self.width;
+        Rectangle {
+            background: px_color == 0 ? #ffffff :
+                        px_color == 1 ? #aaaaaa :
+                        px_color == 2 ? #555555 :
+                        #000000;
         }
     }
 
     export component MainWindow inherits Window {
         min-height: 600px;
-        min-width: 600px;
+        min-width: 800px;
         HorizontalLayout {
             alignment: LayoutAlignment.start;
             spacing: 20px;
             padding: 20px;
             VerticalLayout {
                 padding: 15px;
-                Button {text: "white";}
-                Button {text: "light grey";}
-                Button {text: "daek grey";}
-                Button {text: "black";}
+                PalletColor {p_color: 0;}
+                PalletColor {p_color: 1;}
+                PalletColor {p_color: 2;}
+                PalletColor {p_color: 3;}
             }
             GridLayout {
                 Row {
-                    Button {text: "Test0";}
-                    Button {text: "Test1";}
-                    Button {text: "Test2";}
-                    Button {text: "Test3";}
-                    Button {text: "Test4";}
-                    Button {text: "Test5";}
-                    Button {text: "Test6";}
-                    Button {text: "Test7";}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
                 }
                 Row {
-                    Button {text: "Test0";}
-                    Button {text: "Test1";}
-                    Button {text: "Test2";}
-                    Button {text: "Test3";}
-                    Button {text: "Test4";}
-                    Button {text: "Test5";}
-                    Button {text: "Test6";}
-                    Button {text: "Test7";}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
                 }
                 Row {
-                    Button {text: "Test0";}
-                    Button {text: "Test1";}
-                    Button {text: "Test2";}
-                    Button {text: "Test3";}
-                    Button {text: "Test4";}
-                    Button {text: "Test5";}
-                    Button {text: "Test6";}
-                    Button {text: "Test7";}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
                 }
                 Row {
-                    Button {text: "Test0";}
-                    Button {text: "Test1";}
-                    Button {text: "Test2";}
-                    Button {text: "Test3";}
-                    Button {text: "Test4";}
-                    Button {text: "Test5";}
-                    Button {text: "Test6";}
-                    Button {text: "Test7";}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
                 }
                 Row {
-                    Button {text: "Test0";}
-                    Button {text: "Test1";}
-                    Button {text: "Test2";}
-                    Button {text: "Test3";}
-                    Button {text: "Test4";}
-                    Button {text: "Test5";}
-                    Button {text: "Test6";}
-                    Button {text: "Test7";}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
+                    Pixel {px_color: 3;}
                 }
                 Row {
-                    Button {text: "Test0";}
-                    Button {text: "Test1";}
-                    Button {text: "Test2";}
-                    Button {text: "Test3";}
-                    Button {text: "Test4";}
-                    Button {text: "Test5";}
-                    Button {text: "Test6";}
-                    Button {text: "Test7";}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
+                    Pixel {px_color: 2;}
                 }
                 Row {
-                    Button {text: "Test0";}
-                    Button {text: "Test1";}
-                    Button {text: "Test2";}
-                    Button {text: "Test3";}
-                    Button {text: "Test4";}
-                    Button {text: "Test5";}
-                    Button {text: "Test6";}
-                    Button {text: "Test7";}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
+                    Pixel {px_color: 1;}
                 }
                 Row {
-                Button {text: "Test0";}
-                Button {text: "Test1";}
-                Button {text: "Test2";}
-                Button {text: "Test3";}
-                Button {text: "Test4";}
-                Button {text: "Test5";}
-                Button {text: "Test6";}
-                Button {text: "Test7";}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
+                    Pixel {px_color: 0;}
             }
         }
         
