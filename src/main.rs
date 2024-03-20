@@ -20,6 +20,8 @@ slint::slint! {
 
     component Pixel  {
         in property <int> px_color;
+        in property <int> x_position;
+        in property <int> y_position;
         min-height: 64px;
         min-width: 64px;
         max-height: self.width;
@@ -28,6 +30,9 @@ slint::slint! {
                         px_color == 1 ? #aaaaaa :
                         px_color == 2 ? #555555 :
                         #000000;
+            border-width: ta.has-hover ? 2px : 0;
+            border-color: #ff23ae;
+            ta := TouchArea {}
         }
     }
 
@@ -44,92 +49,17 @@ slint::slint! {
                 PalletColor {p_color: 1;}
                 PalletColor {p_color: 2;}
                 PalletColor {p_color: 3;}
-            }
-            GridLayout {
-                Row {
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
+            }            
+            VerticalLayout {
+                for x in [0,1,2,3,4,5,6,7]: HorizontalLayout {
+                    for y in [0,1,2,3,4,5,6,7] : Pixel {
+                        px_color: Math.mod((x + y), 3);
+                        x_position: x;
+                        y_position: y;
+                    }
                 }
-                Row {
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                }
-                Row {
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                }
-                Row {
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                }
-                Row {
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                    Pixel {px_color: 3;}
-                }
-                Row {
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                    Pixel {px_color: 2;}
-                }
-                Row {
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                    Pixel {px_color: 1;}
-                }
-                Row {
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
-                    Pixel {px_color: 0;}
             }
         }
-        
-        }
-        // MemoryTile {}
     }
 }
 
