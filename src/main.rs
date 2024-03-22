@@ -37,6 +37,10 @@ slint::slint! {
     }
 
     export component MainWindow inherits Window {
+        in-out property<[[int]]> pixelGrid: [[0,1,2,3,0,1,2,3],[3,2,1,0,3,2,1,0],[0,0,1,1,2,2,3,3],[3,3,2,2,1,1,0,0],[0,1,2,3,0,1,2,3],[3,2,1,0,3,2,1,0],[0,0,1,1,2,2,3,3],[3,3,2,2,1,1,0,0]];
+        public function setPixel(x: int, y: int, color: int) {
+            pixelGrid[x][y] = color;
+        }
         min-height: 600px;
         min-width: 800px;
         HorizontalLayout {
@@ -51,9 +55,9 @@ slint::slint! {
                 PalletColor {p_color: 3;}
             }            
             VerticalLayout {
-                for x in [0,1,2,3,4,5,6,7]: HorizontalLayout {
-                    for y in [0,1,2,3,4,5,6,7] : Pixel {
-                        px_color: Math.mod((x + y), 3);
+                for row[x] in pixelGrid: HorizontalLayout {
+                    for pxColor[y] in row : Pixel {
+                        px_color: pixelGrid[x][y];
                         x_position: x;
                         y_position: y;
                     }
@@ -64,7 +68,6 @@ slint::slint! {
 }
 
 fn main() {
-    MainWindow::new().unwrap().run().unwrap();
 
     // let mut td = TileData {
     //     low: [0,0,0,0,0,0,0,0],
@@ -93,6 +96,16 @@ fn main() {
         Err(error) => panic!("File not saved {error}"),
     }
 
+    
+    let window = MainWindow::new().unwrap();
+    let image = &ts.data[0];
+    for x in 0..8 {
+        for y in 0..8 {
+            window.invoke_setPixel(x,y,image.get_pixel(x as usize, y as usize) as i32);
+        }
+    }
+    
+    window.run().unwrap();
     //let _ = ts.write_bmp();
     //let _ = ts.write_png();
 
