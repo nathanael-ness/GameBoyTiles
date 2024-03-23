@@ -16,10 +16,19 @@ slint::slint! {
                         p_color == 2 ? #555555 :
                         #000000;
         }
+        TouchArea {
+            clicked => {
+                Palette.primary = p_color;
+            }
+        }
+    }
+
+    global Palette  {
+        in-out property<int> primary: 0;
     }
 
     component Pixel  {
-        in property <int> px_color;
+        in-out property <int> px_color;
         in property <int> x_position;
         in property <int> y_position;
         min-height: 64px;
@@ -34,9 +43,15 @@ slint::slint! {
             border-color: #ff23ae;
             ta := TouchArea {}
         }
+        TouchArea {
+            clicked => {
+                root.px_color = Palette.primary;
+            }
+        }
     }
 
     export component MainWindow inherits Window {
+        in-out property <int> brushColor: 0;
         in-out property<[[int]]> pixelGrid: [[0,1,2,3,0,1,2,3],[3,2,1,0,3,2,1,0],[0,0,1,1,2,2,3,3],[3,3,2,2,1,1,0,0],[0,1,2,3,0,1,2,3],[3,2,1,0,3,2,1,0],[0,0,1,1,2,2,3,3],[3,3,2,2,1,1,0,0]];
         public function setPixel(x: int, y: int, color: int) {
             pixelGrid[x][y] = color;
