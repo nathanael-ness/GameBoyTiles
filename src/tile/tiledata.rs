@@ -8,6 +8,9 @@ pub struct TileData {
 
 impl TileData {
     #![allow(dead_code)]
+    pub fn new() -> Self {
+        Default::default()
+    }
     pub fn set_pixel(&mut self, x: usize, y: usize, color: i32) {
         if color < 0 || color >= 4 {
             return;
@@ -49,6 +52,12 @@ impl TileData {
         let h = (high >> 7 - x) << 1;
         let l = low >> 7 - x;
         return (h + l) as u32;
+    }
+}
+
+impl Default for TileData {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

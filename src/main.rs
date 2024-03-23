@@ -1,5 +1,6 @@
+use slint::Window;
 //use tile::tiledata::TileData;
-use tile::tileset::TileSet;
+use tile::{tiledata::TileData, tileset::TileSet};
 
 mod tile;
 
@@ -9,12 +10,14 @@ slint::slint! {
         in property <int> p_color;
         min-height: 32px;
         min-width: 32px;
-        max-height: self.width;
+        max-height: self.width;        
         Rectangle {
             background: p_color == 0 ? #ffffff :
                         p_color == 1 ? #aaaaaa :
                         p_color == 2 ? #555555 :
                         #000000;
+            border-width: p_color == Palette.primary ? 2px : 0px;
+            border-color: p_color == Palette.primary ? #ff23ae : #000000;
         }
         TouchArea {
             clicked => {
@@ -51,11 +54,16 @@ slint::slint! {
     }
 
     export component MainWindow inherits Window {
-        in-out property <int> brushColor: 0;
         in-out property<[[int]]> pixelGrid: [[0,1,2,3,0,1,2,3],[3,2,1,0,3,2,1,0],[0,0,1,1,2,2,3,3],[3,3,2,2,1,1,0,0],[0,1,2,3,0,1,2,3],[3,2,1,0,3,2,1,0],[0,0,1,1,2,2,3,3],[3,3,2,2,1,1,0,0]];
         public function setPixel(x: int, y: int, color: int) {
             pixelGrid[x][y] = color;
         }
+        public pure function getPixel(x: int, y: int) -> int { return pixelGrid[x][y]; }
+        
+
+        callback load;
+        callback save;
+        
         min-height: 600px;
         min-width: 800px;
         HorizontalLayout {
@@ -77,6 +85,10 @@ slint::slint! {
                         y_position: y;
                     }
                 }
+            }
+            VerticalLayout {
+                Button { text: "Load"; clicked => { root.load(); } max-height: 20px;}
+                Button { text: "Save"; clicked => { root.save(); } max-height: 20px;}
             }
         }
     }
@@ -113,13 +125,31 @@ fn main() {
 
     
     let window = MainWindow::new().unwrap();
-    let image = &ts.data[0];
-    for x in 0..8 {
-        for y in 0..8 {
-            window.invoke_setPixel(x,y,image.get_pixel(x as usize, y as usize) as i32);
+
+    let main_window_weak = window.as_weak();
+    window.on_load(move || {
+        let window = main_window_weak.unwrap();
+        let image = &ts.data[0];
+        for x in 0..8 {
+            for y in 0..8 {
+                window.invoke_setPixel(x,y,image.get_pixel(x as usize, y as usize) as i32);
+            }
         }
-    }
-    
+    });
+
+    window.on_save(move || {
+        let window = main_window_weak.unwrap();
+        let mut image: TileData = Default::default();
+        for x in 0..8 {
+            for y in 0..8 {
+                image.set_pixel(x, y, window.invoke_getPixel(x as i32,y as i32));
+            }
+        }
+        ts.data.push(image);
+        let _ = ts.write_png();
+    });
+
+   
     window.run().unwrap();
     //let _ = ts.write_bmp();
     //let _ = ts.write_png();
