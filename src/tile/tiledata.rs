@@ -1,6 +1,6 @@
 use core::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct TileData {
     pub low: [u8; 8],
     pub high: [u8; 8]
@@ -57,7 +57,10 @@ impl TileData {
 
 impl Default for TileData {
     fn default() -> Self {
-        Self::new()
+        return TileData {
+            low: [0,0,0,0,0,0,0,0],
+            high: [0,0,0,0,0,0,0,0]
+        }
     }
 }
 

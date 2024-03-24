@@ -18,6 +18,10 @@ impl TileSet {
             data: Vec::new()
         }
     }
+    pub fn copy_image(&self, index: usize) -> TileData {
+        return self.data[index];
+    } 
+
     pub fn read_file(&mut self, file_path: &str) -> io::Result<()> {
         let f = File::open(file_path)?;
         let mut reader = BufReader::new(f);
@@ -101,8 +105,9 @@ impl TileSet {
         Ok(())
     }
 
-    pub fn write_png(&self) -> io::Result<()> {
-        let path = Path::new("temp/image.png");
+    pub fn write_png(&self, index: usize) -> io::Result<()> {
+        let path = format!("temp/image{index}.png");
+        let path = Path::new(&path);
         let file = OpenOptions::new().write(true).create(true).open(path).unwrap();
         let ref mut w = BufWriter::new(file);
 
@@ -113,7 +118,7 @@ impl TileSet {
         let mut writer = encoder.write_header().unwrap();
 
         let mut data: [u8; 16] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        let px = &self.data[0];
+        let px = &self.data[index];
             for y in 0..8 {
                 let mut line: u8 = 3 - px.get_pixel(0, y) as u8;
                 for x in 1..4 {

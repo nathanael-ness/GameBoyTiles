@@ -127,9 +127,9 @@ fn main() {
     let window = MainWindow::new().unwrap();
 
     let main_window_weak = window.as_weak();
+    let image = ts.data[0].clone();
     window.on_load(move || {
         let window = main_window_weak.unwrap();
-        let image = &ts.data[0];
         for x in 0..8 {
             for y in 0..8 {
                 window.invoke_setPixel(x,y,image.get_pixel(x as usize, y as usize) as i32);
@@ -137,16 +137,17 @@ fn main() {
         }
     });
 
+    let main_window_weak = window.as_weak();
+    let mut image: TileData = Default::default();
     window.on_save(move || {
         let window = main_window_weak.unwrap();
-        let mut image: TileData = Default::default();
         for x in 0..8 {
             for y in 0..8 {
-                image.set_pixel(x, y, window.invoke_getPixel(x as i32,y as i32));
+                image.set_pixel(x, y, window.invoke_getPixel(x as i32,y as i32));                
             }
         }
         ts.data.push(image);
-        let _ = ts.write_png();
+        // let _ = ts.write_png(9);
     });
 
    
